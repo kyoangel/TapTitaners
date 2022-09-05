@@ -1,0 +1,41 @@
+﻿@model TapTitaner.Models.GameViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>title</title>
+
+</head>
+<body>
+<div>
+    <h1 id="name">@Model.Monster.Name</h1>
+    <h1 id="hitPoints">@Model.Monster.HitPoints</h1>
+    <button type="button" id="hit" value="OK">Hit</button>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+            $("#hit").click(function (e) {
+                       $.ajax({
+                               method: "POST",
+                               url: "https://localhost:7085/game/hit",
+                               data: {
+                                   attackPoints: 1
+                                   }
+                           }).done(function (response) {
+                               $("#name").text(response.name);
+                               $("#hitPoints").text(response.hitPoints);
+                       
+                           }).fail(function (xhr) {
+                               alert("Sorry, Something is wrong (" + xhr.status + "," + xhr.statusText + ")");
+                           });
+                });
+        </script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</div>
+</body>
+</html>
