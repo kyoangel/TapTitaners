@@ -9,33 +9,75 @@
 <html>
 <head>
     <title>title</title>
-
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css">
 </head>
 <body>
-<div>
-    <h1 id="name">@Model.Monster.Name</h1>
-    <h1 id="hitPoints">@Model.Monster.HitPoints</h1>
-    <button type="button" id="hit" value="OK">Hit</button>
+<div class="container col-auto">
+    <div class="row">
+        <h1 class="col-auto">Monster: </h1>
+        <h1 id="name" class="col">@Model.Monster.Name</h1>
+    </div>
+    <div class="row">
+        <h1 class="col-auto">Monster HP: </h1>
+        <h1 id="hitPoints" class="col">@Model.Monster.HitPoints</h1>
+    </div>
+    <div class="row">
+        <div class="col-auto">
+            <button type="button" id="hit" class="btn-lg btn-danger">Hit</button>
+        </div>
+        <div class="col-auto">
+            <h1 class="col">Hero AP:</h1>
+        </div>
+        <div class="col">
+            <h1 id="ap" class="col">@Model.Hero.AttackPoints</h1>
+        </div>
+        <div class="col-auto">
+            <button type="button" id="skillHit" class="btn-lg btn-danger">Skill</button>
+        </div>
+        <div class="col-auto">
+            <h1 class="col">Hero MP:</h1>
+        </div>
+        <div class="col">
+            <h1 id="mp" class="col">@Model.Hero.ManaPoints</h1>
+        </div>
+    </div>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript">
-            $("#hit").click(function (e) {
-                       $.ajax({
-                               method: "POST",
-                               url: "https://localhost:7085/game/hit",
-                               data: {
-                                   attackPoints: 1
-                                   }
-                           }).done(function (response) {
-                               $("#name").text(response.name);
-                               $("#hitPoints").text(response.hitPoints);
-                       
-                           }).fail(function (xhr) {
-                               alert("Sorry, Something is wrong (" + xhr.status + "," + xhr.statusText + ")");
-                           });
-                });
-        </script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
 </div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript">
+$("#hit").click(function () {
+	$.ajax({
+		method: "POST",
+		url: "https://localhost:7085/game/hit",
+		data: {
+			attackPoints: $("#ap").text()
+		}
+	}).done(function (response) {
+		$("#name").text(response.name);
+		$("#hitPoints").text(response.hitPoints);
+
+	}).fail(function (xhr) {
+		alert("Sorry, Something is wrong (" + xhr.status + "," + xhr.statusText + ")");
+	});
+});
+$("#skillHit").click(function () {
+	$.ajax({
+		method: "POST",
+		url: "https://localhost:7085/game/skillhit",
+		data: {
+			attackPoints: $("#ap").text()
+		}
+	}).done(function (response) {
+		$("#name").text(response._monster.name);
+		$("#hitPoints").text(response._monster.hitPoints);
+		$("#mp").text(response._hero.manaPoints)
+
+	}).fail(function (xhr) {
+		alert('Error:' + xhr.responseText);
+	});
+});
+</script>
 </body>
 </html>
