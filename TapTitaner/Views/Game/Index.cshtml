@@ -18,6 +18,10 @@
         <h1 id="name" class="col">@Model.Monster.Name</h1>
     </div>
     <div class="row">
+        <h1 class="col-auto">ElementType: </h1>
+        <h1 id="elementType" class="col">@Model.Monster.ElementType.ToString()</h1>
+    </div>
+    <div class="row">
         <h1 class="col-auto">Monster HP: </h1>
         <h1 id="hitPoints" class="col">@Model.Monster.HitPoints</h1>
     </div>
@@ -32,7 +36,16 @@
             <h1 id="ap" class="col">@Model.Hero.AttackPoints</h1>
         </div>
         <div class="col-auto">
-            <button type="button" id="skillHit" class="btn-lg btn-danger">Skill</button>
+            <button type="button" id="skillHit" onclick="skill('neutral')" class="btn-lg btn-dark">Skill</button>
+        </div>
+        <div class="col-auto">
+            <button type="button" id="fireSkill" onclick="skill('fire')" class="btn-lg btn-danger">FireBall</button>
+        </div>
+        <div class="col-auto">
+            <button type="button" id="waterSkill" onclick="skill('water')" class="btn-lg btn-primary">WaterSplash</button>
+        </div>
+        <div class="col-auto">
+            <button type="button" id="woodSkill" onclick="skill('wood')" class="btn-lg btn-success">WoodStrike</button>
         </div>
         <div class="col-auto">
             <h1 class="col">Hero MP:</h1>
@@ -47,6 +60,8 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
+var elementType = ["Neutral", "Fire", "Water", "Wood"];
+
 $("#hit").click(function () {
 	$.ajax({
 		method: "POST",
@@ -61,23 +76,42 @@ $("#hit").click(function () {
 	}).fail(function (xhr) {
 		alert("Sorry, Something is wrong (" + xhr.status + "," + xhr.statusText + ")");
 	});
-});
-$("#skillHit").click(function () {
-	$.ajax({
-		method: "POST",
-		url: "https://localhost:7085/game/skillhit",
-		data: {
-			attackPoints: $("#ap").text()
-		}
-	}).done(function (response) {
-		$("#name").text(response._monster.name);
-		$("#hitPoints").text(response._monster.hitPoints);
-		$("#mp").text(response._hero.manaPoints)
-
-	}).fail(function (xhr) {
-		alert('Error:' + xhr.responseText);
-	});
-});
+})
+function skill(elementType) {
+  	$.ajax({
+  		method: "POST",
+  		url: "https://localhost:7085/game/skillhit",
+  		data: {
+  			attackPoints: $("#ap").text(),
+  			elementType: elementType
+  		}
+  	}).done(function (response) {
+  		$("#name").text(response._monster.name);
+  		$("#hitPoints").text(response._monster.hitPoints);
+  		$("#elementType").text(window.elementType[response._monster.elementType]);
+  		$("#mp").text(response._hero.manaPoints)
+  
+  	}).fail(function (xhr) {
+  		alert('Error:' + xhr.responseText);
+  	});
+  }
+  
+// $("#skillHit").click(function () {
+// 	$.ajax({
+// 		method: "POST",
+// 		url: "https://localhost:7085/game/skillhit",
+// 		data: {
+// 			attackPoints: $("#ap").text()
+// 		}
+// 	}).done(function (response) {
+// 		$("#name").text(response._monster.name);
+// 		$("#hitPoints").text(response._monster.hitPoints);
+// 		$("#mp").text(response._hero.manaPoints)
+//
+// 	}).fail(function (xhr) {
+// 		alert('Error:' + xhr.responseText);
+// 	});
+// });
 </script>
 </body>
 </html>

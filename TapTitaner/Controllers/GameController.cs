@@ -40,7 +40,67 @@ public class GameController : Controller
             return BadRequest("ManaPoints not enough");
         }
 
-        _monster.HitPoints -= request.AttackPoints * 3;
+        switch (request.ElementType)
+        {
+            case ElementType.Neutral:
+                _monster.HitPoints -= request.AttackPoints * 3;
+                break;
+            case ElementType.Fire:
+                switch (_monster.ElementType)
+                {
+                    case ElementType.Neutral:
+                    case ElementType.Fire:
+                        _monster.HitPoints -= request.AttackPoints * 2; 
+                        break;
+                    case ElementType.Water:
+                        _monster.HitPoints -= request.AttackPoints;
+                        break;
+                    case ElementType.Wood:
+                        _monster.HitPoints -= request.AttackPoints * 4; 
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+                break;
+            case ElementType.Water:
+                switch (_monster.ElementType)
+                {
+                    case ElementType.Fire:
+                        _monster.HitPoints -= request.AttackPoints * 4; 
+                        break;
+                    case ElementType.Neutral:
+                    case ElementType.Water:
+                        _monster.HitPoints -= request.AttackPoints * 2;
+                        break;
+                    case ElementType.Wood:
+                        _monster.HitPoints -= request.AttackPoints; 
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                break;
+            case ElementType.Wood:
+                switch (_monster.ElementType)
+                {
+                    case ElementType.Fire:
+                        _monster.HitPoints -= request.AttackPoints; 
+                        break;
+                    case ElementType.Water:
+                        _monster.HitPoints -= request.AttackPoints * 4;
+                        break;
+                    case ElementType.Neutral:
+                    case ElementType.Wood:
+                        _monster.HitPoints -= request.AttackPoints * 2; 
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
 
         if (_monster.HitPoints <= 0)
         {
