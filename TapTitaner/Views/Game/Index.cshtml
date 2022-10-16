@@ -53,12 +53,17 @@
         <div class="col">
             <h1 id="mp" class="col">@Model.Hero.ManaPoints</h1>
         </div>
-    </div>
 
+    </div>
+    <div class="row-6 border border-secondary" style="padding-top: 10px;max-height: 400px;scroll-behavior: auto;overflow:scroll">
+        <div id="log" class="col"></div>
+        <div id="logAnchor" class="invisible"></div>
+    </div>
 
 </div>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/lib/moment/moment.min.js"></script>
 <script type="text/javascript">
 var elementType = ["Neutral", "Fire", "Water", "Wood"];
 
@@ -70,9 +75,11 @@ $("#hit").click(function () {
 			attackPoints: $("#ap").text()
 		}
 	}).done(function (response) {
+        logger(`hero hit ${$("#name").text()} with ap ${$("#ap").text()}`);
+        
 		$("#name").text(response.name);
 		$("#hitPoints").text(response.hitPoints);
-
+        
 	}).fail(function (xhr) {
 		alert("Sorry, Something is wrong (" + xhr.status + "," + xhr.statusText + ")");
 	});
@@ -86,6 +93,8 @@ function skill(elementType) {
   			elementType: elementType
   		}
   	}).done(function (response) {
+        logger(`hero hit ${$("#name").text()} with ${elementType} skill`);
+        
   		$("#name").text(response._monster.name);
   		$("#hitPoints").text(response._monster.hitPoints);
   		$("#elementType").text(window.elementType[response._monster.elementType]);
@@ -95,23 +104,12 @@ function skill(elementType) {
   		alert('Error:' + xhr.responseText);
   	});
   }
-  
-// $("#skillHit").click(function () {
-// 	$.ajax({
-// 		method: "POST",
-// 		url: "https://localhost:7085/game/skillhit",
-// 		data: {
-// 			attackPoints: $("#ap").text()
-// 		}
-// 	}).done(function (response) {
-// 		$("#name").text(response._monster.name);
-// 		$("#hitPoints").text(response._monster.hitPoints);
-// 		$("#mp").text(response._hero.manaPoints)
-//
-// 	}).fail(function (xhr) {
-// 		alert('Error:' + xhr.responseText);
-// 	});
-// });
+ function logger(message){
+    let logArea = $("#log");
+    logArea.append(`${moment().format()}: ${message} <br />`);
+    const element = document.getElementById("logAnchor");
+    element.scrollIntoView();
+}    
 </script>
 </body>
 </html>
