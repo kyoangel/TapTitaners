@@ -30,7 +30,13 @@
             <button type="button" id="hit" class="btn-lg btn-danger">Hit</button>
         </div>
         <div class="col-auto">
-            <h1 class="col">Hero AP:</h1>
+            <h1 class="col">Hero LV:</h1>
+        </div>
+        <div class="col">
+            <h1 id="lv" class="col">@Model.Hero.Lv</h1>
+        </div>
+        <div class="col-auto">
+            <h1 class="col">AP:</h1>
         </div>
         <div class="col">
             <h1 id="ap" class="col">@Model.Hero.AttackPoints</h1>
@@ -76,14 +82,21 @@ $("#hit").click(function () {
 		}
 	}).done(function (response) {
         logger(`hero hit ${$("#name").text()} with ap ${$("#ap").text()}`);
-        
-		$("#name").text(response.name);
-		$("#hitPoints").text(response.hitPoints);
+  		updateStatus(response);
+
         
 	}).fail(function (xhr) {
 		alert("Sorry, Something is wrong (" + xhr.status + "," + xhr.statusText + ")");
 	});
 })
+function updateStatus(response){
+  		$("#name").text(response._monster.name);
+  		$("#hitPoints").text(response._monster.hitPoints);
+  		$("#elementType").text(window.elementType[response._monster.elementType]);
+  		$("#mp").text(response._hero.manaPoints);
+        $("#ap").text(response._hero.attackPoints);
+        $("#lv").text(response._hero.lv);
+}
 function skill(elementType) {
   	$.ajax({
   		method: "POST",
@@ -94,11 +107,7 @@ function skill(elementType) {
   		}
   	}).done(function (response) {
         logger(`hero hit ${$("#name").text()} with ${elementType} skill`);
-        
-  		$("#name").text(response._monster.name);
-  		$("#hitPoints").text(response._monster.hitPoints);
-  		$("#elementType").text(window.elementType[response._monster.elementType]);
-  		$("#mp").text(response._hero.manaPoints)
+  		updateStatus(response);
   
   	}).fail(function (xhr) {
   		alert('Error:' + xhr.responseText);

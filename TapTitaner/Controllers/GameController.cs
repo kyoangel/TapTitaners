@@ -24,12 +24,9 @@ public class GameController : Controller
     {
         _monster.HitPoints -= request.AttackPoints;
 
-        if (_monster.HitPoints <= 0)
-        {
-            _monster = new Monster(GetRandomMonsterName(), GetMoreHitPoints(_monster.MaximumHitPoints));
-        }
+        IsMonsterDead();
 
-        return Ok(_monster);
+        return Ok(new { _monster, _hero });
     }
 
     [HttpPost]
@@ -102,15 +99,20 @@ public class GameController : Controller
                 throw new ArgumentOutOfRangeException();
         }
 
-        if (_monster.HitPoints <= 0)
-        {
-            _monster = new Monster(GetRandomMonsterName(), GetMoreHitPoints(_monster.MaximumHitPoints));
-        }
+        IsMonsterDead();
         _hero.ManaPoints -= 1;
 
         return Ok(new { _monster, _hero });
     }
 
+    private static void IsMonsterDead()
+    {
+        if (_monster.HitPoints <= 0)
+        {
+            _hero.GainExp(_monster.Exp);
+            _monster = new Monster(GetRandomMonsterName(), GetMoreHitPoints(_monster.MaximumHitPoints));
+        }
+    }
 
     private static int GetMoreHitPoints(int lastTimeHitPoints)
     {

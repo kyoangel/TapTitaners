@@ -7,6 +7,7 @@ public class Monster
     public int MaximumHitPoints { get; }
 
     public ElementType ElementType { get; set; }
+    public int Exp { get; set; }
 
     public Monster(string name, int hitPoints)
     {
@@ -15,5 +16,6 @@ public class Monster
         MaximumHitPoints = hitPoints;
         var next = new Random().Next(0, Enum.GetNames(typeof(ElementType)).Length);
         ElementType = (ElementType)next;
+        Exp = 1;
     }
 }
