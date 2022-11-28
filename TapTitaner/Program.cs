@@ -1,7 +1,11 @@
+using TapTitaner.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddSingleton<GameDataRecorder>();
+builder.Services.AddTransient<SaveFilterAttribute>();
 
 var app = builder.Build();
 

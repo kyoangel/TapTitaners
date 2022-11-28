@@ -4,18 +4,25 @@ public class Hero
 {
     private int _currentLvLeftExp;
 
-    public Hero(int attackPoints, int manaPoints)
-    {
-        Lv = 1;
-        _currentLvLeftExp = Lv;
-        AttackPoints = attackPoints;
-        ManaPoints = manaPoints;
-    }
+    // public Hero(int attackPoints, int manaPoints)
+    // {
+    //     Lv = 1;
+    //     _currentLvLeftExp = Lv;
+    //     AttackPoints = attackPoints;
+    //     ManaPoints = manaPoints;
+    // }
+    //
+    // public Hero(int lv)
+    // {
+    //     Lv = 1;
+    //     _currentLvLeftExp = Lv;
+    //     ManaPoints = lv * 5;
+    // }
 
-    public int AttackPoints { get; private set; }
+    public int AttackPoints { get; set; }= 1;
 
-    public int ManaPoints { get; set; }
-    public int TotalExp { get; private set; }
+    public int ManaPoints { get; set; } = 10;
+    public int TotalExp { get; set; } 
 
     public void GainExp(int exp)
     {
@@ -28,12 +35,12 @@ public class Hero
         }
     }
 
-    public int Lv { get; set; }
+    public int Lv { get; set; } = 1;
 
     private void LevelUp()
     {
         Lv += 1;
         AttackPoints = Convert.ToInt16(Math.Ceiling(Lv / 2d));
-        ManaPoints = 10;
+        ManaPoints = Lv + 10;
     }
 }

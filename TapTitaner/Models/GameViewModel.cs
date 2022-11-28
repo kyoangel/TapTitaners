@@ -1,6 +1,4 @@
-﻿using TapTitaner.Controllers;
-
-namespace TapTitaner.Models;
+﻿namespace TapTitaner.Models;
 
 public class GameViewModel
 {

@@ -1,124 +1,31 @@
-﻿@model TapTitaner.Models.GameViewModel
+﻿@model dynamic
 
 @{
+    ViewBag.Title = "Welcome";
     Layout = null;
 }
 
-<!DOCTYPE html>
-
-<html>
 <head>
-    <title>title</title>
+    <title>Welcome</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css">
 </head>
-<body>
+
 <div class="container col-auto">
+    <h2>Welcome</h2>
     <div class="row">
-        <h1 class="col-auto">Monster: </h1>
-        <h1 id="name" class="col">@Model.Monster.Name</h1>
-    </div>
-    <div class="row">
-        <h1 class="col-auto">ElementType: </h1>
-        <h1 id="elementType" class="col">@Model.Monster.ElementType.ToString()</h1>
+        <button id="loadgame" class="col" onclick="loadGame()">Load Game</button>
     </div>
     <div class="row">
-        <h1 class="col-auto">Monster HP: </h1>
-        <h1 id="hitPoints" class="col">@Model.Monster.HitPoints</h1>
+        <button id="newgame" class="col" onclick="newGame()">New Game</button>
     </div>
-    <div class="row">
-        <div class="col-auto">
-            <button type="button" id="hit" class="btn-lg btn-danger">Hit</button>
-        </div>
-        <div class="col-auto">
-            <h1 class="col">Hero LV:</h1>
-        </div>
-        <div class="col">
-            <h1 id="lv" class="col">@Model.Hero.Lv</h1>
-        </div>
-        <div class="col-auto">
-            <h1 class="col">AP:</h1>
-        </div>
-        <div class="col">
-            <h1 id="ap" class="col">@Model.Hero.AttackPoints</h1>
-        </div>
-        <div class="col-auto">
-            <button type="button" id="skillHit" onclick="skill('neutral')" class="btn-lg btn-dark">Skill</button>
-        </div>
-        <div class="col-auto">
-            <button type="button" id="fireSkill" onclick="skill('fire')" class="btn-lg btn-danger">FireBall</button>
-        </div>
-        <div class="col-auto">
-            <button type="button" id="waterSkill" onclick="skill('water')" class="btn-lg btn-primary">WaterSplash</button>
-        </div>
-        <div class="col-auto">
-            <button type="button" id="woodSkill" onclick="skill('wood')" class="btn-lg btn-success">WoodStrike</button>
-        </div>
-        <div class="col-auto">
-            <h1 class="col">Hero MP:</h1>
-        </div>
-        <div class="col">
-            <h1 id="mp" class="col">@Model.Hero.ManaPoints</h1>
-        </div>
-
-    </div>
-    <div class="row-6 border border-secondary" style="padding-top: 10px;max-height: 400px;scroll-behavior: auto;overflow:scroll">
-        <div id="log" class="col"></div>
-        <div id="logAnchor" class="invisible"></div>
-    </div>
-
 </div>
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/lib/moment/moment.min.js"></script>
+
 <script type="text/javascript">
-var elementType = ["Neutral", "Fire", "Water", "Wood"];
+function newGame(){
+    window.location = '/game/newgame';
+    }
+    function loadGame(){
+    window.location = '/game/loadgame'
+    }
 
-$("#hit").click(function () {
-	$.ajax({
-		method: "POST",
-		url: "https://localhost:7085/game/hit",
-		data: {
-			attackPoints: $("#ap").text()
-		}
-	}).done(function (response) {
-        logger(`hero hit ${$("#name").text()} with ap ${$("#ap").text()}`);
-  		updateStatus(response);
-
-        
-	}).fail(function (xhr) {
-		alert("Sorry, Something is wrong (" + xhr.status + "," + xhr.statusText + ")");
-	});
-})
-function updateStatus(response){
-  		$("#name").text(response._monster.name);
-  		$("#hitPoints").text(response._monster.hitPoints);
-  		$("#elementType").text(window.elementType[response._monster.elementType]);
-  		$("#mp").text(response._hero.manaPoints);
-        $("#ap").text(response._hero.attackPoints);
-        $("#lv").text(response._hero.lv);
-}
-function skill(elementType) {
-  	$.ajax({
-  		method: "POST",
-  		url: "https://localhost:7085/game/skillhit",
-  		data: {
-  			attackPoints: $("#ap").text(),
-  			elementType: elementType
-  		}
-  	}).done(function (response) {
-        logger(`hero hit ${$("#name").text()} with ${elementType} skill`);
-  		updateStatus(response);
-  
-  	}).fail(function (xhr) {
-  		alert('Error:' + xhr.responseText);
-  	});
-  }
- function logger(message){
-    let logArea = $("#log");
-    logArea.append(`${moment().format()}: ${message} <br />`);
-    const element = document.getElementById("logAnchor");
-    element.scrollIntoView();
-}    
 </script>
-</body>
-</html>
